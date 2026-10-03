@@ -1,0 +1,32 @@
+/* Nova — estilos de la interfaz (chrome del navegador) */
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+:root{
+  --nova-acc:#3aa0ff;
+  --nova-glass:color-mix(in srgb, Canvas 55%, transparent);
+}
+/* Barra de pestañas translucida (Aero) */
+#navigator-toolbox{ background:var(--nova-glass) !important; }
+#TabsToolbar,#nav-bar{ background:transparent !important; box-shadow:none !important }
+#urlbar-background{ border-radius:20px !important }
+
+/* Pestañas redondeadas con animacion de entrada */
+.tabbrowser-tab .tab-background{ border-radius:12px 12px 0 0 !important; margin-block:3px 0 !important }
+.tabbrowser-tab:not([pinned])[fadein]{ transition:min-width .25s ease, max-width .25s ease, opacity .2s ease !important }
+
+/* "+" pegado a la ultima pestana: usamos el boton interno de la lista de pestanas
+   y ocultamos el duplicado de la barra de herramientas */
+#new-tab-button{ display:none !important }
+#tabbrowser-tabs[hasadjacentnewtabbutton] ~ #new-tab-button,
+#tabs-newtab-button{ display:flex !important }
+#tabs-newtab-button{
+  width:28px !important; height:28px !important; margin:6px 4px !important;
+  border-radius:50% !important; background:var(--nova-acc) !important; color:#fff !important;
+  transition:transform .2s ease, margin .25s ease;
+}
+#tabs-newtab-button:hover{ transform:rotate(90deg) scale(1.08) }
+#tabs-newtab-button .toolbarbutton-icon{ fill:#fff !important; -moz-context-properties:fill }
+
+/* Animaciones opcionales: se desactivan con prefers-reduced-motion */
+@media (prefers-reduced-motion:reduce){
+  .tabbrowser-tab, #tabs-newtab-button{ transition:none !important }
+}

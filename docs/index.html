@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Nova Browser · Descargas</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--acc:#3aa0ff;--fg:#12202e;--glass:rgba(255,255,255,.6);--line:rgba(255,255,255,.7)}
+@media (prefers-color-scheme:dark){:root{--fg:#e6eef7;--glass:rgba(20,30,44,.6);--line:rgba(255,255,255,.12)}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Segoe UI",system-ui,sans-serif;color:var(--fg);background:linear-gradient(135deg,#9fd3ff,#d9f0ff 45%,#b6e8d4) fixed}
+@media (prefers-color-scheme:dark){body{background:linear-gradient(135deg,#16283d,#1f3d5c 45%,#1c4a43) fixed}}
+main{max-width:720px;margin:0 auto;padding:56px 20px}
+h1{font-weight:300;font-size:clamp(40px,8vw,72px);margin:0 0 6px;letter-spacing:-.03em}
+.lead{opacity:.75;margin:0 0 28px}
+.b{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;margin-bottom:10px;border-radius:16px;background:var(--glass);backdrop-filter:blur(22px);border:1px solid var(--line)}
+.b small{opacity:.65;display:block}
+a.d{background:var(--acc);color:#fff;text-decoration:none;padding:9px 18px;border-radius:18px;white-space:nowrap}
+</style></head><body><main>
+<h1>Nova</h1><p class="lead">Navegador basado en Floorp (Gecko). Versiones para Windows.</p>
+<div id="l">Cargando versiones…</div></main>
+<script>
+// Detecta usuario/repositorio desde la URL de GitHub Pages: usuario.github.io/repositorio/
+const owner=location.hostname.split('.')[0],repo=location.pathname.split('/')[1]||'';
+const L=document.getElementById('l');
+fetch(`https://api.github.com/repos/${owner}/${repo}/releases`).then(r=>r.json()).then(rs=>{
+  if(!Array.isArray(rs)||!rs.length){L.textContent='Aún no hay versiones publicadas.';return}
+  L.innerHTML=rs.map(r=>{const a=(r.assets||[]).find(x=>x.name.endsWith('.exe'));
+    return `<div class="b"><div><b>${r.name||r.tag_name}</b><small>${new Date(r.published_at).toLocaleDateString('es')}${r.prerelease?' · prueba':''}</small></div>${a?`<a class="d" href="${a.browser_download_url}">Descargar</a>`:''}</div>`}).join('');
+}).catch(()=>L.textContent='No se pudieron cargar las versiones.');
+</script></body></html>

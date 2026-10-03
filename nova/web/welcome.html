@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Bienvenido a Nova</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--acc:#3aa0ff;--fg:#12202e;--glass:rgba(255,255,255,.6);--line:rgba(255,255,255,.7)}
+@media (prefers-color-scheme:dark){:root{--fg:#e6eef7;--glass:rgba(20,30,44,.6);--line:rgba(255,255,255,.12)}}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{font-family:"Segoe UI Variable","Segoe UI",system-ui,sans-serif;color:var(--fg);background:linear-gradient(135deg,#9fd3ff,#d9f0ff 45%,#b6e8d4) fixed;display:grid;place-items:center}
+@media (prefers-color-scheme:dark){body{background:linear-gradient(135deg,#16283d,#1f3d5c 45%,#1c4a43) fixed}}
+.card{width:min(560px,92vw);padding:36px;border-radius:24px;background:var(--glass);backdrop-filter:blur(26px);border:1px solid var(--line)}
+.logo{width:64px;height:64px;border-radius:20px;background:conic-gradient(from 200deg,#3aa0ff,#7be0c3,#3aa0ff);display:grid;place-items:center;color:#fff;font-size:30px;animation:pop .8s ease both}
+@keyframes pop{from{transform:scale(.3) rotate(-90deg);opacity:0}}
+h1{font-weight:600;margin:18px 0 6px}p{line-height:1.55;opacity:.85}
+.s{display:none}.s.on{display:block}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:26px}
+button{font:inherit;border:0;border-radius:20px;padding:10px 22px;background:var(--acc);color:#fff;cursor:pointer}
+button.g{background:transparent;color:inherit;opacity:.7}
+.dots{display:flex;gap:6px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--acc)}
+kbd{padding:2px 7px;border-radius:6px;background:var(--line);font:inherit;font-size:.9em}
+@media (prefers-reduced-motion:reduce){.logo{animation:none}}
+</style></head><body><div class="card">
+<div class="logo">✦</div>
+<div class="s on"><h1>Bienvenido a Nova</h1><p>Un navegador basado en Gecko: rápido, con vidrio y pensado para que las pestañas se sientan vivas. Te enseño lo esencial en un minuto.</p></div>
+<div class="s"><h1>Pestañas y pantalla dividida</h1><p>El <b>+</b> viaja pegado a tu última pestaña. Pulsa <kbd>Ctrl</kbd>+<kbd>T</kbd> para abrir otra. Para ver dos webs a la vez, arrastra una pestaña a un lado de la ventana o usa el menú de la pestaña → «Dividir vista».</p></div>
+<div class="s"><h1>Tus datos y tus extensiones</h1><p>Menú ☰ → <b>Importar datos de otro navegador</b> trae marcadores, historial y contraseñas. Las extensiones de Firefox se instalan desde <b>addons.mozilla.org</b>. Para herramientas de desarrollo usa <kbd>F12</kbd>.</p></div>
+<div class="s"><h1>Hazlo tuyo</h1><p>En Ajustes → Apariencia eliges claro/oscuro, colores y fondos. Para ponerlo como navegador predeterminado abre Ajustes de Windows → Aplicaciones predeterminadas → Nova.</p><p style="opacity:.6">Cuenta Nova y sincronización: próximamente.</p></div>
+<div class="row"><button class="g" id="skip">Saltar</button><div class="dots"></div><button id="next">Siguiente</button></div>
+</div>
+<script>
+const S=[...document.querySelectorAll('.s')],D=document.querySelector('.dots');let i=0;
+D.innerHTML=S.map(()=>'<i></i>').join('');
+function show(){S.forEach((s,k)=>s.classList.toggle('on',k==i));[...D.children].forEach((d,k)=>d.classList.toggle('on',k==i));document.getElementById('next').textContent=i==S.length-1?'Empezar':'Siguiente'}
+document.getElementById('next').onclick=()=>{if(i==S.length-1)location.href='resource://nova/web/newtab.html';else{i++;show()}};
+document.getElementById('skip').onclick=()=>location.href='resource://nova/web/newtab.html';
+show();
+</script></body></html>

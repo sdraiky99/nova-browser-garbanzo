@@ -1,0 +1,65 @@
+name: Build Nova
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  windows:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Descargar Floorp (última versión estable)
+        shell: bash
+        run: |
+          FL=$(gh api repos/Floorp-Projects/Floorp/releases/latest --jq .tag_name)
+          echo "FLOORP_TAG=$FL" >> "$GITHUB_ENV"
+          curl -fL -o floorp.installer.exe "https://github.com/Floorp-Projects/Floorp/releases/download/$FL/floorp-win64.installer.exe"
+          7z x floorp.installer.exe -ostage "-ir!core"
+          test -f stage/core/floorp.exe
+
+      - name: Aplicar la capa Nova
+        shell: bash
+        run: |
+          mkdir -p stage/core/nova
+          cp -r nova/defaults stage/core/
+          cp -r nova/distribution stage/core/
+          cp nova/nova.cfg stage/core/nova.cfg
+          cp -r nova/web stage/core/nova/
+          ls stage/core | head -40
+
+      - name: Icono de Nova en el ejecutable (opcional)
+        continue-on-error: true
+        shell: bash
+        run: |
+          npm install rcedit@4 --no-audit --no-fund
+          node -e "import('rcedit').then(async m=>{const f=m.rcedit||m.default;await f('stage/core/floorp.exe',{icon:'assets/icon.ico','version-string':{ProductName:'Nova',FileDescription:'Nova Browser'}})})"
+
+      - name: Compilar instalador
+        shell: bash
+        run: |
+          V=$(cat VERSION | tr -d '\r\n')
+          echo "NOVA_V=$V" >> "$GITHUB_ENV"
+          mkdir -p dist
+          if ! command -v makensis >/dev/null 2>&1 && [ ! -f "/c/Program Files (x86)/NSIS/makensis.exe" ]; then choco install nsis -y; fi
+          MK="/c/Program Files (x86)/NSIS/makensis.exe"
+          "$MK" -DVERSION=$V installer/nova.nsi
+          ls -lah dist
+
+      - name: Publicar release
+        shell: bash
+        run: |
+          TAG="v$NOVA_V"
+          NOTES="Nova $NOVA_V — basado en Floorp $FLOORP_TAG (Gecko)."
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/*.exe --clobber
+          else
+            gh release create "$TAG" dist/*.exe --title "Nova $NOVA_V" --notes "$NOTES" --prerelease
+          fi

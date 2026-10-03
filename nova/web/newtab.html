@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Nueva pestaña</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--acc:#3aa0ff;--fg:#12202e;--glass:rgba(255,255,255,.55);--line:rgba(255,255,255,.7);--w1:#9fd3ff;--w2:#d9f0ff;--w3:#b6e8d4}
+@media (prefers-color-scheme:dark){:root{--fg:#e6eef7;--glass:rgba(20,30,44,.55);--line:rgba(255,255,255,.12);--w1:#16283d;--w2:#1f3d5c;--w3:#1c4a43}}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{font-family:"Segoe UI Variable","Segoe UI",system-ui,sans-serif;color:var(--fg);background:linear-gradient(135deg,var(--w1),var(--w2) 45%,var(--w3)) center/cover fixed;display:grid;place-items:center}
+main{text-align:center;width:min(560px,92vw);margin-top:-6vh}
+h1{font-weight:300;font-size:clamp(48px,9vw,88px);margin:0;letter-spacing:-.03em}
+p{margin:2px 0 26px;opacity:.7}
+input{width:100%;padding:15px 22px;border-radius:28px;border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(22px);color:var(--fg);font:inherit;outline:none}
+input:focus{border-color:var(--acc)}
+.sc{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.sc a{width:84px;font-size:12px;color:inherit;text-decoration:none}
+.sc i{display:grid;place-items:center;width:56px;height:56px;margin:0 auto 6px;border-radius:16px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(22px);font-style:normal;font-size:22px;transition:transform .2s}
+.sc a:hover i{transform:translateY(-4px)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><main>
+<h1 id="t"></h1><p id="g"></p>
+<form action="https://duckduckgo.com/" method="get"><input name="q" placeholder="Buscar en la web" autofocus autocomplete="off"></form>
+<div class="sc">
+<a href="https://www.youtube.com"><i>▶</i>Vídeos</a><a href="https://mail.google.com"><i>✉</i>Correo</a>
+<a href="https://www.openstreetmap.org"><i>🗺</i>Mapas</a><a href="https://news.google.com"><i>📰</i>Noticias</a>
+<a href="https://github.com"><i>⌥</i>GitHub</a></div></main>
+<script>
+const t=document.getElementById('t'),g=document.getElementById('g');
+function tick(){const d=new Date();t.textContent=d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+const h=d.getHours();g.textContent=(h<6?'Buenas noches':h<13?'Buenos días':h<20?'Buenas tardes':'Buenas noches')+'. ¿Qué buscamos?'}
+tick();setInterval(tick,10000);
+</script></body></html>

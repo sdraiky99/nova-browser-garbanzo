@@ -1,0 +1,10 @@
+{
+  "policies": {
+    "DisableTelemetry": true,
+    "DisableAppUpdate": true,
+    "OverrideFirstRunPage": "resource://nova/web/welcome.html",
+    "OverridePostUpdatePage": "",
+    "NoDefaultBookmarks": false,
+    "DontCheckDefaultBrowser": true
+  }
+}
